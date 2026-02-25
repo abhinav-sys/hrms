@@ -1,6 +1,8 @@
 # AttendPro – Attendance & HR Portal
 
-A full-stack **Attendance & HR Management** app built with **React + TypeScript** (frontend) and **FastAPI + Python** (backend). Track attendance, manage employees, and view live stats with a clean, modern UI.
+AttendPro is a small, opinionated **HR & attendance portal** for teams.  
+The UI is built with **React + TypeScript** and **Vite**, while the API is powered by **FastAPI**, **PostgreSQL**, and **SQLAlchemy**.  
+Use it to keep a lightweight record of employees, daily check‑ins, and high‑level attendance trends.
 
 ---
 
@@ -18,40 +20,39 @@ Live deployment:
 
 ## Features
 
-### Core
-- **Dashboard** – Live attendance rate, stat cards, recent employees, quick-action shortcuts
-- **Employee Management** – Add, search, filter by department, view details, delete (with cascade)
-- **Attendance Tracking** – Mark attendance (Present / Absent / Late / Half Day), edit records, date-range filter
+### What you can do
+- **Monitor the day at a glance** – Attendance percentage, quick stats, and the latest activity on a single dashboard.
+- **Manage employees** – Create, search, and filter employees by department; view key details and remove records safely.
+- **Record attendance** – Mark staff as Present, Absent, Late, or Half Day; update records and slice by date range.
 
-### Bonus
-- Total present days shown per employee
-- Filter attendance by date range, employee, and status
-- Mini summary bar on attendance page (counts per status)
-- Attendance rate progress bar on dashboard
+### Nice touches
+- Per‑employee **total present days** so you can see consistency over time.
+- Rich filters on the attendance table (date span, employee, status).
+- A compact summary bar that breaks down counts by status.
+- Clean, responsive layout that works from mobile to desktop.
 
-### UX
-- Toast notifications for all actions
-- Confirmation dialogs before destructive actions
-- Loading states, error states, and empty states
-- Fully responsive (mobile sidebar, card-based mobile tables)
+### UX details
+- Non‑blocking toast notifications for all mutations.
+- Confirmation prompts before destructive actions.
+- Dedicated loading, error, and empty states for smoother flows.
 
 ---
 
 ## Tech Stack
 
 ### Frontend
-- **React 18** – UI library
-- **Vite** – Build tool and dev server
-- **React Router** – Client-side routing
-- **Tailwind CSS** – Styling
-- **Axios** – HTTP client
+- **React 18** – Component‑based UI.
+- **Vite** – Fast dev server and bundler.
+- **React Router** – Client‑side navigation between pages.
+- **Tailwind CSS** – Utility‑first styling.
+- **Axios** – HTTP client for talking to the API.
 
 ### Backend
-- **FastAPI** – Python web framework
-- **SQLAlchemy** – ORM
-- **PostgreSQL** – Database
-- **Pydantic** – Validation
-- **Uvicorn** – ASGI server
+- **FastAPI** – Async web framework with automatic docs.
+- **SQLAlchemy** – ORM and query layer.
+- **PostgreSQL** – Relational data store.
+- **Pydantic** – Data validation and serialization.
+- **Uvicorn** – ASGI server used in production.
 
 ---
 
@@ -85,10 +86,10 @@ Live deployment:
 ## Running Locally
 
 ### Prerequisites
-- Python 3.11+
-- Node.js 18+
+- Python 3.11+ available on your PATH
+- Node.js 18+ (LTS) and npm
 
-### 1 – Backend
+### 1 – Start the backend API
 
 ```bash
 cd backend
@@ -101,9 +102,9 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
-API: `http://localhost:8000` · Docs: `http://localhost:8000/docs`
+The API will be reachable at `http://localhost:8000` and the interactive docs at `http://localhost:8000/docs`.
 
-### 2 – Frontend
+### 2 – Start the frontend
 
 ```bash
 cd frontend
@@ -111,72 +112,55 @@ npm install
 npm run dev
 ```
 
-App: `http://localhost:5173`
+By default Vite serves the app on `http://localhost:5173`.
 
 ---
 
 ## Deploy to production
 
-**Repo:** [https://github.com/abhinav-sys/hrms](https://github.com/abhinav-sys/hrms)
+**Repository:** [`abhinav-sys/hrms`](https://github.com/abhinav-sys/hrms)
 
-Deploy **backend first** (Render), then **frontend** (Vercel) so you can set the API URL.
+The production setup used for this demo is:
 
-### 1. Push code to GitHub
+- **Backend:** Render (`https://hrms-uc3g.onrender.com/`)
+- **Frontend:** Vercel (`https://hrms-iota-three.vercel.app/`)
 
-```bash
-cd path/to/hrms-portal-main   # or your project root (where frontend/ and backend/ are)
-git init
-git add .
-git commit -m "AttendPro: full-stack attendance app"
-git branch -M main
-git remote add origin https://github.com/abhinav-sys/hrms.git
-git push -u origin main
-```
+You can either reuse that layout or adapt the steps below for your own accounts.
 
-(If the repo already has content, use `git pull origin main --rebase` then `git push origin main`.)
+### 1. Backend on Render
 
----
-
-### 2. Backend on Render
-
-1. Go to [render.com](https://render.com) → **Dashboard** → **New** → **Web Service**.
-2. Connect the repository **abhinav-sys/hrms** (or push your code there first).
-3. Configure:
-   - **Name:** `attendpro-backend` (or any name)
+1. Sign in to [Render](https://render.com) and choose **New → Web Service**.
+2. Connect the GitHub repo `abhinav-sys/hrms`.
+3. Configure the service:
+   - **Name:** anything you like (for example, `attendpro-backend`)
    - **Root Directory:** `backend`
    - **Runtime:** Python 3
    - **Build Command:** `pip install -r requirements.txt`
    - **Start Command:** `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-4. **Environment:**
-   - Add **DATABASE_URL** = your Neon (or other Postgres) URL, e.g.  
-     `postgresql://user:pass@host/dbname?sslmode=require`
-5. Click **Create Web Service**. Wait for the first deploy.
-6. Copy your backend URL, e.g. `https://attendpro-backend-xxxx.onrender.com`.
+4. Add environment variables:
+   - `DATABASE_URL` – your Postgres connection string (Neon, Render, RDS, etc.),  
+     e.g. `postgresql://user:pass@host/dbname?sslmode=require`
+5. Create the service and wait for the first deployment to finish.
+6. Note the public URL, for example `https://hrms-uc3g.onrender.com/`.
 
----
+### 2. Frontend on Vercel
 
-### 3. Frontend on Vercel
-
-1. Go to [vercel.com](https://vercel.com) → **Add New** → **Project**.
-2. Import **abhinav-sys/hrms** (or the repo you pushed).
-3. Configure:
-   - **Root Directory:** `frontend` (click Edit, set to `frontend`)
+1. Go to [Vercel](https://vercel.com) → **Add New → Project**.
+2. Import the `abhinav-sys/hrms` repository.
+3. Under **Project Settings → Build & Development**:
+   - **Root Directory:** `frontend`
    - **Build Command:** `npm run build`
    - **Output Directory:** `dist`
-   - **Framework Preset:** Vite (optional; Vercel usually detects it)
-4. **Environment variable:**
-   - Name: `VITE_API_URL`  
-   - Value: your Render backend URL (e.g. `https://hrms-uc3g.onrender.com`)  
-   - No trailing slash.
-5. Deploy. Your app will be at `https://hrms-iota-three.vercel.app/` (or your custom domain).
+   - **Framework Preset:** Vite
+4. Under **Environment Variables**, add:
+   - `VITE_API_URL` = your Render backend URL (for example, `https://hrms-uc3g.onrender.com`) – without a trailing slash.
+5. Deploy the project; Vercel will give you a URL such as `https://hrms-iota-three.vercel.app/`.
 
----
+### 3. After deploy
 
-### 4. After deploy
-
-- **Frontend:** Open `https://hrms-iota-three.vercel.app/`; the app will call the backend using `VITE_API_URL`.
-- **API docs:** `https://hrms-uc3g.onrender.com/docs`
-- If you change the Render service URL, update `VITE_API_URL` in Vercel and redeploy the frontend.
+- Visit `https://hrms-iota-three.vercel.app/` to use the app in production.
+- Confirm that API requests are going to `https://hrms-uc3g.onrender.com`.
+- If you ever change the backend URL, update `VITE_API_URL` in Vercel and trigger a new deployment.
 
 ---
 
